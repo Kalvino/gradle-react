@@ -1,0 +1,24 @@
+plugins {
+  id "com.github.node-gradle.node" version "5.0.0"
+}
+ 
+apply plugin: 'base'
+apply plugin: 'com.github.node-gradle.node'
+ 
+node {
+    version = "10.15.0"
+    download = true
+}
+ 
+task bundle(type: NpmTask, dependsOn: npmInstall) {
+    args = ['build']
+}
+ 
+assemble.dependsOn(bundle)
+
+task test(type: NpmTask) {
+    environment = ['CI': 'true']
+    args = ['run', 'test']
+}
+ 
+check.dependsOn(test)
